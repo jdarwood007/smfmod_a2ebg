@@ -1,4 +1,4 @@
-Copyright (c) 2011, SleePy (smf-mods-license@sleepycode.com)
+Copyright (c) 2011, SleePy (smf [dash] mods [dash] license [dash] a2ebg [at] sleepycode [dot]com)
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
