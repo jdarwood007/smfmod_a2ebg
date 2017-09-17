@@ -4,7 +4,7 @@
 <package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
 	<id>SleePy:Add_to_Existing_Ban_Group</id>
 	<name>Add to Existing Ban Group</name>
-	<version>1.0.3</version>
+	<version>1.1</version>
 	<type>modification</type>
 	<install for="2.0-2.0.99">
 		<readme>README.txt</readme>
@@ -14,4 +14,14 @@
 	<uninstall for="2.0-2.0.99">
 		<modification reverse="true">add_to_existing_ban_group-20x.xml</modification>
 	</uninstall>
+
+	<install for="2.1 Beta 3, 2.1 Beta 4, 2.1 RC1">
+		<readme>README.txt</readme>
+		<modification>add_to_existing_ban_group-21x.xml</modification>
+		<database>database_install.php</database>
+	</install>
+	<uninstall for="2.1 Beta 3, 2.1 Beta 4, 2.1 RC1">
+		<modification reverse="true">add_to_existing_ban_group-21x.xml</modification>
+	</uninstall>
+
 </package-info>
