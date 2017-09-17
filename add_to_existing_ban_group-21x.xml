@@ -183,7 +183,7 @@ $txt['aebg_auto_select'] = 'Easy Ban Auto select ban options';
 	if ($context['ban']['is_new'] && !empty($context['ban_group_suggestions']))
 	{		
 		echo '
-					<fieldset>
+					<div class="information noup">
 						<legend>', $txt['aebg_add_existing'], '</legend>
 						<select name="ban_group" onchange="disableOtherFields();" id="ban_group">
 							<option value="-1" selected="selected">', $txt['aebg_new_ban_group'], '</option>';
@@ -193,7 +193,7 @@ $txt['aebg_auto_select'] = 'Easy Ban Auto select ban options';
 							<option value="', $id_ban_group, '" onselect="disableOtherFields();">', $ban_name, '</option>';
 		echo '
 						</select>
-					</fieldset>';
+					</div>';
 	}
 
 	echo '
