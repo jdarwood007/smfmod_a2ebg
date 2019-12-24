@@ -182,7 +182,7 @@ build:
             tests:
                 override:
                     - php-scrutinizer-run
-    my-tests:
-      environment:
-        php:
-          version: 7.2
+        my-tests:
+            environment:
+                php:
+                    version: 7.2
