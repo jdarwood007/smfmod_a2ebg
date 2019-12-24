@@ -14,11 +14,19 @@ global $db_prefix, $modSettings, $func, $smcFunc;
 
 if (version_compare('2.0 RC2', $modSettings['smfVersion']) > 0)
 	exit('<b>Error:</b> Cannot install - Your SMF version is not sufficient enough.  Please upgrade to SMF 2.0 RC2 or higher');
-elseif (version_compare('2.1 Beta 2', $modSettings['smfVersion']) > 0 && version_compare('2.1 Beta 1', $modSettings['smfVersion']) < 0)
-	exit('<b>Error:</b> Cannot install - Your SMF version is not sufficient enough.  Please upgrade to SMF 2.1 Beta 3 or higher');
+elseif (version_compare('2.1 RC2', $modSettings['smfVersion']) > 0 && version_compare('2.1 Beta 1', $modSettings['smfVersion']) < 0)
+	exit('<b>Error:</b> Cannot install - Your SMF version is not sufficient enough.  Please upgrade to SMF 2.1 RC2 or higher');
 
 // Our column.
-$smcFunc['db_add_column']($db_prefix . "ban_groups", array('name'=> 'easy_bg', 'type'=>'smallint', 'size' => '3'));
+$smcFunc['db_add_column'](
+	$db_prefix . "ban_groups",
+	array(
+		'name'=> 'easy_bg',
+		'type'=>'smallint',
+		'size' => '3',
+		'default' => 0,
+	)
+);
 
 if(!empty($using_ssi))
 	echo 'If no errors, Success!';
