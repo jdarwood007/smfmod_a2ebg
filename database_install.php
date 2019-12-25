@@ -28,6 +28,6 @@ $smcFunc['db_add_column'](
 	)
 );
 
-if(!empty($using_ssi))
+if (!empty($using_ssi))
 	echo 'If no errors, Success!';
 ?>

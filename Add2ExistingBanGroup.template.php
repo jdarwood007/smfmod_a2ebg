@@ -6,7 +6,7 @@ function template_easyban_above()
 
 	// Only allow selecting a ban group if it is new.
 	if ($context['ban']['is_new'] && !empty($context['ban_group_suggestions']))
-	{		
+	{
 		echo '
 			<div class="cat_bar">
 				<h3 class="catbg">', $txt['aebg_add_existing'], '</h3>
@@ -51,7 +51,7 @@ function template_easyban_below()
 			$autoSelects = is_array($modSettings['aebg_auto_select']) ? $modSettings['aebg_auto_select'] : json_decode($modSettings['aebg_auto_select'], true);
 			foreach ($allOptions as $elID => $dummy)
 				echo '
-			$("#', $elID, '").prop("checked", ', (in_array($elID, $autoSelects) ? 'true' : 'false'),');';
+			$("#', $elID, '").prop("checked", ', (in_array($elID, $autoSelects) ? 'true' : 'false'), ');';
 		}
 		
 		echo '
