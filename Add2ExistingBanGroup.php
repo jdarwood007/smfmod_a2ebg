@@ -11,12 +11,12 @@ global $modSettings;
  */
 class a2ebg
 {
-	public static function loadLanguage()
+	public static function loadLanguage(): void
 	{
 		loadLanguage('Add2ExistingBanGroup');
 	}
 
-	public static function hook_general_mod_settings(&$config_vars)
+	public static function hook_general_mod_settings(array &$config_vars): void
 	{
 		global $txt;
 
@@ -31,7 +31,7 @@ class a2ebg
 
 	// This is called when we edit a ban regardless of if its new or not.
 	// This also gets called during saving the edit and we do some work here.
-	public static function hook_edit_bans(&$ban_info, $isNew)
+	public static function hook_edit_bans(array &$ban_info, int $isNew): void
 	{
 		global $context, $smcFunc;
 
@@ -111,7 +111,7 @@ class a2ebg
 	}
 
 	// Called when we edit a existing ban group
-	public static function hook_ban_edit_list()
+	public static function hook_ban_edit_list(): void
 	{
 		global $context;
 
@@ -121,7 +121,7 @@ class a2ebg
 	}
 
 	// Called when we do a new ban group but not calling with a from user.
-	public static function hook_ban_edit_new()
+	public static function hook_ban_edit_new(): void
 	{
 		global $context, $smcFunc, $modSettings;
 
@@ -158,7 +158,7 @@ class a2ebg
 	}
 
 	// We are saving a ban.  Lets update that info if needed.
-	public static function hook_edit_bans_post()
+	public static function hook_edit_bans_post(): void
 	{
 		global $context, $smcFunc;
 
@@ -178,7 +178,7 @@ class a2ebg
 	}
 
 	// Get our ban info for the modify ban
-	public static function hook_ban_list()
+	public static function hook_ban_list(): void
 	{
 		global $smcFunc, $context;
 
