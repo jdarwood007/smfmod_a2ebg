@@ -1,6 +1,3 @@
-filter:
-    excluded_paths:
-        - '*.min.js'
 checks:
     php:
         variable_existence: true
@@ -187,5 +184,7 @@ build:
                     - git clone https://github.com/SimpleMachines/SMF2.1 smf
 
 filter:
+    excluded_paths:
+        - '*.min.js'
     dependency_paths:
         - smf/
