@@ -15,7 +15,7 @@
 		<modification reverse="true">add_to_existing_ban_group-20x.xml</modification>
 	</uninstall>
 
-	<install for="2.1 RC4, 2.1-2.1.99">
+	<install for="2.1-2.1.99">
 		<readme>README.txt</readme>
 		<database>database_install.php</database>
 
@@ -31,7 +31,7 @@
 		<hook hook="integrate_ban_list" function="a2ebg::hook_ban_list" file="$sourcedir/Add2ExistingBanGroup.php" />
 		<hook hook="integrate_ban_edit_list" function="a2ebg::hook_ban_edit_list" file="$sourcedir/Add2ExistingBanGroup.php" />
 	</install>
-	<uninstall for="2.1 RC4, 2.1-2.1.99">
+	<uninstall for="2.1-2.1.99">
 		<remove-file name="language/Add2ExistingBanGroup.english.php" destination="$themes_dir/default/languages" />
 		<remove-file name="Add2ExistingBanGroup.template.php" destination="$themedir" />
 		<remove-file name="Add2ExistingBanGroup.php" destination="$sourcedir" />
