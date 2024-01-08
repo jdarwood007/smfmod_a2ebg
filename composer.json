@@ -1,0 +1,27 @@
+{
+    "name": "jdarwood007/smfmod_a2ebg",
+    "description": " SMF Mod: Add to existing ban groups ",
+    "type": "smf-mod",
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.46",
+        "overtrue/phplint": "9.0.4"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "license": "BSD 3-Clause License",
+    "authors": [
+        {
+            "name": "jdarwood007"
+        }
+    ],
+    "require": {},
+    "scripts": {
+        "lint": "php-cs-fixer check --diff --config .php-cs-fixer.dist.php --path-mode=intersection $(git diff --name-only \"*.php\")",
+        "lint-fix": "php-cs-fixer fix -v --config .php-cs-fixer.dist.php --path-mode=intersection $(git diff --name-only \"*.php\")"
+    },
+    "config": {
+        "platform": {
+            "php": "8.0.0"
+        }
+    }
+}

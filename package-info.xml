@@ -4,24 +4,46 @@
 <package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
 	<id>SleePy:Add_to_Existing_Ban_Group</id>
 	<name>Add to Existing Ban Group</name>
-	<version>2.0</version>
+	<version>2.1</version>
 	<type>modification</type>
-	<install for="2.0-2.0.99">
+
+	<install for="3.0 Alpha 1">
 		<readme>README.txt</readme>
-		<modification>add_to_existing_ban_group-20x.xml</modification>
-		<database>database_install.php</database>
+		<database>SMF3.0/database_install.php</database>
+
+		<require-file name="language/Add2ExistingBanGroup.english.php" destination="$themes_dir/default/languages" />
+		<require-file name="SMF3.0/Add2ExistingBanGroup.template.php" destination="$themedir" />
+		<require-file name="SMF3.0/Add2ExistingBanGroup.php" destination="$sourcedir" />
+
+		<!-- All the hooks -->
+		<hook hook="integrate_general_mod_settings" function="a2ebg::addToGeneralModSettings" file="$sourcedir/Add2ExistingBanGroup.php" />
+		<hook hook="integrate_edit_bans" function="a2ebg::addToEditBans" file="$sourcedir/Add2ExistingBanGroup.php" />
+		<hook hook="integrate_ban_edit_new" function="a2ebg::addToBanEditNew" file="$sourcedir/Add2ExistingBanGroup.php" />
+		<hook hook="integrate_edit_bans_post" function="a2ebg::addToEditBansPost" file="$sourcedir/Add2ExistingBanGroup.php" />
+		<hook hook="integrate_ban_list" function="a2ebg::addToBanList" file="$sourcedir/Add2ExistingBanGroup.php" />
+		<hook hook="integrate_ban_edit_list" function="a2ebg::addToBanEditList" file="$sourcedir/Add2ExistingBanGroup.php" />
 	</install>
-	<uninstall for="2.0-2.0.99">
-		<modification reverse="true">add_to_existing_ban_group-20x.xml</modification>
+	<uninstall for="3.0 Alpha 1">
+		<remove-file name="$themes_dir/default/languages/Add2ExistingBanGroup.english.php" />
+		<remove-file name="$themedir/Add2ExistingBanGroup.template.php" />
+		<remove-file name="$sourcedir/Add2ExistingBanGroup.php" />
+
+		<!-- All the hooks in reverse -->
+		<hook hook="integrate_general_mod_settings" function="a2ebg::addToGeneralModSettings" file="$sourcedir/Add2ExistingBanGroup.php" reverse="true" />
+		<hook hook="integrate_edit_bans" function="a2ebg::addToEditBans" file="$sourcedir/Add2ExistingBanGroup.php" reverse="true" />
+		<hook hook="integrate_ban_edit_new" function="a2ebg::addToBanEditNew" file="$sourcedir/Add2ExistingBanGroup.php" reverse="true" />
+		<hook hook="integrate_edit_bans_post" function="a2ebg::addToEditBansPost" file="$sourcedir/Add2ExistingBanGroup.php" reverse="true" />
+		<hook hook="integrate_ban_list" function="a2ebg::addToBanList" file="$sourcedir/Add2ExistingBanGroup.php" reverse="true" />
+		<hook hook="integrate_ban_edit_list" function="a2ebg::addToBanEditList" file="$sourcedir/Add2ExistingBanGroup.php" reverse="true" />
 	</uninstall>
 
 	<install for="2.1-2.1.99">
 		<readme>README.txt</readme>
-		<database>database_install.php</database>
+		<database>SMF2.1/database_install.php</database>
 
 		<require-file name="language/Add2ExistingBanGroup.english.php" destination="$themes_dir/default/languages" />
-		<require-file name="Add2ExistingBanGroup.template.php" destination="$themedir" />
-		<require-file name="Add2ExistingBanGroup.php" destination="$sourcedir" />
+		<require-file name="SMF2.1/Add2ExistingBanGroup.template.php" destination="$themedir" />
+		<require-file name="SMF2.1/Add2ExistingBanGroup.php" destination="$sourcedir" />
 
 		<!-- All the hooks -->
 		<hook hook="integrate_general_mod_settings" function="a2ebg::hook_general_mod_settings" file="$sourcedir/Add2ExistingBanGroup.php" />
@@ -32,9 +54,9 @@
 		<hook hook="integrate_ban_edit_list" function="a2ebg::hook_ban_edit_list" file="$sourcedir/Add2ExistingBanGroup.php" />
 	</install>
 	<uninstall for="2.1-2.1.99">
-		<remove-file name="language/Add2ExistingBanGroup.english.php" destination="$themes_dir/default/languages" />
-		<remove-file name="Add2ExistingBanGroup.template.php" destination="$themedir" />
-		<remove-file name="Add2ExistingBanGroup.php" destination="$sourcedir" />
+		<remove-file name="$themes_dir/default/languages/Add2ExistingBanGroup.english.php" />
+		<remove-file name="$themedir/Add2ExistingBanGroup.template.php" />
+		<remove-file name="$sourcedir/Add2ExistingBanGroup.php" />
 
 		<!-- All the hooks in reverse -->
 		<hook hook="integrate_general_mod_settings" function="a2ebg::hook_general_mod_settings" file="$sourcedir/Add2ExistingBanGroup.php" reverse="true" />
@@ -43,6 +65,15 @@
 		<hook hook="integrate_edit_bans_post" function="a2ebg::hook_edit_bans_post" file="$sourcedir/Add2ExistingBanGroup.php" reverse="true" />
 		<hook hook="integrate_ban_list" function="a2ebg::hook_ban_list" file="$sourcedir/Add2ExistingBanGroup.php" reverse="true" />
 		<hook hook="integrate_ban_edit_list" function="a2ebg::hook_ban_edit_list" file="$sourcedir/Add2ExistingBanGroup.php" reverse="true" />
+	</uninstall>
+
+	<install for="2.0-2.0.99">
+		<readme>README.txt</readme>
+		<modification>SMF2.0/add_to_existing_ban_group-20x.xml</modification>
+		<database>SMF2.1/database_install.php</database>
+	</install>
+	<uninstall for="2.0-2.0.99">
+		<modification reverse="true">SMF2.0/add_to_existing_ban_group-20x.xml</modification>
 	</uninstall>
 
 </package-info>

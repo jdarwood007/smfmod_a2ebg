@@ -1,0 +1,52 @@
+name: PHP Check
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ 8.0, 8.1, 8.2, 8.3 ]
+
+    name: PHP ${{ matrix.php }} Syntax Check
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup PHP ${{ matrix.php }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        coverage: none
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      if: steps.composer-cache.outputs.cache-hit != 'true'
+      run: composer install --prefer-dist --no-progress --ansi
+
+    - name: Lint PHP files
+      run: vendor/overtrue/phplint/bin/phplint -w --exclude .git --exclude vendor --ansi .
+
+  csfixer:
+    runs-on: ubuntu-latest
+
+    name: PHP CS Fixer
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: luminsports-php-cs-fixer
+      uses: luminsports/github-action-php-cs-fixer@main
+      with:
+        php-cs-fixer-version: "v3.46.0"
+        use-built-in-rules: false
