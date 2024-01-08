@@ -1,14 +1,15 @@
 <?php
 
 use SMF\Config;
-use SMF\Utils;
 use SMF\Lang;
+use SMF\Utils;
 
 function template_easyban_above()
 {
 	// Only allow selecting a ban group if it is new.
-	if (!Utils::$context['ban']['is_new'] || empty(Utils::$context['ban_group_suggestions']))
+	if (!Utils::$context['ban']['is_new'] || empty(Utils::$context['ban_group_suggestions'])) {
 		return;
+	}
 
 	echo '
 	<script type="text/javascript">
@@ -26,19 +27,22 @@ function template_easyban_above()
 		$("#manage_bans .windowbg>.ban_settings").toggle(visibility);';
 
 	// Do we want to auto select some options?
-	if (!empty(Config::$modSettings['aebg_auto_select']))
-	{
+	if (!empty(Config::$modSettings['aebg_auto_select'])) {
 		// Incase it isn't an array.
 		$allOptions = array_flip(['main_ip_check', 'hostname_check', 'email_check', 'user_check']);
-		if (!empty(Config::$modSettings['disableHostnameLookup']))
+
+		if (!empty(Config::$modSettings['disableHostnameLookup'])) {
 			unset($allOptions['hostname_check']);
+		}
 
 		$autoSelects = is_array(Config::$modSettings['aebg_auto_select']) ? Config::$modSettings['aebg_auto_select'] : json_decode(Config::$modSettings['aebg_auto_select'], true);
-		foreach ($allOptions as $elID => $dummy)
+
+		foreach ($allOptions as $elID => $dummy) {
 			echo '
 		$("#', $elID, '").prop("checked", ', (in_array($elID, $autoSelects) ? 'true' : 'false'), ');';
+		}
 	}
-	
+
 	echo '
 	}
 	</script>
@@ -50,9 +54,10 @@ function template_easyban_above()
 					<select id="temp_ban_group" name="ban_group" onchange="disableOtherFields()" id="ban_group">
 						<option value="-1" selected="selected">', Lang::$txt['aebg_new_ban_group'], '</option>';
 
-	foreach (Utils::$context['ban_group_suggestions'] as $id_ban_group => $ban_name)
+	foreach (Utils::$context['ban_group_suggestions'] as $id_ban_group => $ban_name) {
 		echo '
 						<option value="', $id_ban_group, '" onselect="disableOtherFields()">', $ban_name, '</option>';
+	}
 	echo '
 					</select>
 		</div>';

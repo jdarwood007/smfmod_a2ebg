@@ -1,4 +1,5 @@
 <?php
+
 global $modSettings;
 
 /**
@@ -22,11 +23,11 @@ class a2ebg
 
 		self::loadLanguage();
 
-		$config_vars[] = array(
-				'select', 'aebg_auto_select',
-				array('main_ip_check' => $txt['ban_on_ip'], 'hostname_check' => $txt['ban_on_hostname'], 'email_check' => $txt['ban_on_email'], 'user_check' => $txt['ban_on_username']),
-				'multiple' => true,
-			);
+		$config_vars[] = [
+			'select', 'aebg_auto_select',
+			['main_ip_check' => $txt['ban_on_ip'], 'hostname_check' => $txt['ban_on_hostname'], 'email_check' => $txt['ban_on_email'], 'user_check' => $txt['ban_on_username']],
+			'multiple' => true,
+		];
 	}
 
 	// This is called when we edit a ban regardless of if its new or not.
@@ -38,65 +39,68 @@ class a2ebg
 		$ban_info['easy_ban_group'] = empty($_POST['easy_ban_group']) ? '0' : '1';
 
 		// We are adding or modifying a ban normally.
-		if (empty($_POST['ban_group']))
-		{
-			if (!empty($_POST['bg']))
-			{
-				$request = $smcFunc['db_query']('', '
+		if (empty($_POST['ban_group'])) {
+			if (!empty($_POST['bg'])) {
+				$request = $smcFunc['db_query'](
+					'',
+					'
 					SELECT
 						bg.id_ban_group, bg.easy_bg
 					FROM {db_prefix}ban_groups AS bg
 					WHERE bg.id_ban_group = {int:current_ban}',
-					array(
+					[
 						'current_ban' => (int) $_REQUEST['bg'],
-					)
+					],
 				);
 				$row = $smcFunc['db_fetch_assoc']($request);
 				$smcFunc['db_free_result']($request);
 
 				$context['ban']['id'] = $row['id_ban_group'];
 				$context['ban']['easy_bg'] = $row['easy_bg'];
-			}
-			else
+			} else {
 				$context['ban']['easy_bg'] = 0;
+			}
 
 			$context['easy_ban_group'] = $ban_info['easy_ban_group'];
+
 			return;
 		}
 
 		// This occurs when we are "adding" a ban.
-		$request = $smcFunc['db_query']('', '
+		$request = $smcFunc['db_query'](
+			'',
+			'
 			SELECT
 				bg.id_ban_group, bg.name, bg.ban_time, COALESCE(bg.expire_time, 0) AS expire_time, bg.reason, bg.notes, bg.cannot_access, bg.cannot_register, bg.cannot_login, bg.cannot_post, bg.easy_bg
 			FROM {db_prefix}ban_groups AS bg
 			WHERE bg.id_ban_group = {int:current_ban}',
-			array(
+			[
 				'current_ban' => (int) $_REQUEST['ban_group'],
-			)
+			],
 		);
 		$row = $smcFunc['db_fetch_assoc']($request);
 		$smcFunc['db_free_result']($request);
 
-		$context['ban'] = array(
+		$context['ban'] = [
 			'id' => $row['id_ban_group'],
 			'easy_bg' => $row['easy_bg'],
 			'name' => $row['name'],
-			'expiration' => array(
+			'expiration' => [
 				'status' => empty($row['expire_time']) ? 'never' : ($row['expire_time'] < time() ? 'expired' : 'one_day'),
-				'days' => $row['expire_time'] > time() ? ($row['expire_time'] - time() < 86400 ? 1 : ceil(($row['expire_time'] - time()) / 86400)) : 0
-			),
+				'days' => $row['expire_time'] > time() ? ($row['expire_time'] - time() < 86400 ? 1 : ceil(($row['expire_time'] - time()) / 86400)) : 0,
+			],
 			'reason' => $row['reason'],
 			'notes' => $row['notes'],
-			'cannot' => array(
+			'cannot' => [
 				'access' => !empty($row['cannot_access']),
 				'post' => !empty($row['cannot_post']),
 				'register' => !empty($row['cannot_register']),
 				'login' => !empty($row['cannot_login']),
-			),
+			],
 			'is_new' => false,
 			'hostname' => '',
 			'email' => '',
-		);
+		];
 
 		// Setup info for later.
 		$ban_info = $context['ban'];
@@ -129,24 +133,28 @@ class a2ebg
 		loadTemplate('Add2ExistingBanGroup');
 
 		// Normal way of doing a new one? Skip.
-		if (empty($context['ban']['from_user']))
-		{
+		if (empty($context['ban']['from_user'])) {
 			$context['template_layers'][] = 'easyban_edits';
+
 			return;
 		}
 
 		// Find our ban groups we can append.
-		$request = $smcFunc['db_query']('', '
+		$request = $smcFunc['db_query'](
+			'',
+			'
 			SELECT id_ban_group, name
 			FROM {db_prefix}ban_groups
 			WHERE easy_bg = {int:one}
 			ORDER BY name',
-			array(
+			[
 				'one' => '1',
-			)
+			],
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+
+		while ($row = $smcFunc['db_fetch_assoc']($request)) {
 			$context['ban_group_suggestions'][$row['id_ban_group']] = $row['name'];
+		}
 		$smcFunc['db_free_result']($request);
 
 		$context['ban_group_auto_selects'] = is_array($modSettings['aebg_auto_select']) ? $modSettings['aebg_auto_select'] : $smcFunc['json_decode']($modSettings['aebg_auto_select']);
@@ -162,18 +170,21 @@ class a2ebg
 	{
 		global $context, $smcFunc;
 
-		if (!isset($context['easy_ban_group']))
+		if (!isset($context['easy_ban_group'])) {
 			return;
+		}
 
-		$smcFunc['db_query']('', '
+		$smcFunc['db_query'](
+			'',
+			'
 			UPDATE {db_prefix}ban_groups
 			SET
 				easy_bg = {int:easy_bg}
 			WHERE id_ban_group = {int:id_ban_group}',
-			array(
+			[
 				'easy_bg' => $context['easy_ban_group'],
 				'id_ban_group' => $context['ban']['id'],
-			)
+			],
 		);
 	}
 
@@ -183,21 +194,26 @@ class a2ebg
 		global $smcFunc, $context;
 
 		// Main page seems to call this as well.
-		if (empty($context['ban']['id']))
+		if (empty($context['ban']['id'])) {
 			return;
+		}
 
-		$request = $smcFunc['db_query']('', '
+		$request = $smcFunc['db_query'](
+			'',
+			'
 			SELECT
 				bg.easy_bg
 			FROM {db_prefix}ban_groups AS bg
 			WHERE bg.id_ban_group = {int:current_ban}
 	',
-			array(
+			[
 				'current_ban' => $context['ban']['id'],
-			)
+			],
 		);
-		if ($smcFunc['db_num_rows']($request) == 0)
+
+		if ($smcFunc['db_num_rows']($request) == 0) {
 			fatal_lang_error('ban_not_found', false);
+		}
 
 		$row = $smcFunc['db_fetch_assoc']($request);
 		$context['ban']['easy_bg'] = $row['easy_bg'];
