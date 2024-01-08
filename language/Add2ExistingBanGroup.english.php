@@ -1,4 +1,5 @@
 <?php
+
 // Version: 2.1 RC2; Add2ExistingBanGroup
 
 $txt['aebg_add_existing'] = 'Add to existing ban group';

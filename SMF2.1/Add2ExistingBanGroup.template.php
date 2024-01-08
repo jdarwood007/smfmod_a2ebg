@@ -5,8 +5,7 @@ function template_easyban_above()
 	global $context, $txt;
 
 	// Only allow selecting a ban group if it is new.
-	if ($context['ban']['is_new'] && !empty($context['ban_group_suggestions']))
-	{
+	if ($context['ban']['is_new'] && !empty($context['ban_group_suggestions'])) {
 		echo '
 			<div class="cat_bar">
 				<h3 class="catbg">', $txt['aebg_add_existing'], '</h3>
@@ -15,9 +14,10 @@ function template_easyban_above()
 						<select name="ban_group" onchange="disableOtherFields();" id="ban_group">
 							<option value="-1" selected="selected">', $txt['aebg_new_ban_group'], '</option>';
 
-		foreach ($context['ban_group_suggestions'] as $id_ban_group => $ban_name)
+		foreach ($context['ban_group_suggestions'] as $id_ban_group => $ban_name) {
 			echo '
 							<option value="', $id_ban_group, '" onselect="disableOtherFields();">', $ban_name, '</option>';
+		}
 		echo '
 						</select>
 			</div>';
@@ -30,8 +30,7 @@ function template_easyban_below()
 	global $context, $modSettings;
 
 	// Only allow selecting a ban group if it is new.
-	if ($context['ban']['is_new'] && !empty($context['ban_group_suggestions']))
-	{
+	if ($context['ban']['is_new'] && !empty($context['ban_group_suggestions'])) {
 		echo '
 		<script type="text/javascript">
 		function disableOtherFields()
@@ -41,19 +40,22 @@ function template_easyban_below()
 			$("#manage_bans .windowbg>.ban_settings").toggle(visibility);';
 
 		// Do we want to auto select some options?
-		if (!empty($modSettings['aebg_auto_select']))
-		{
+		if (!empty($modSettings['aebg_auto_select'])) {
 			// Incase it isn't an array.
-			$allOptions = array_flip(array('main_ip_check', 'hostname_check', 'email_check', 'user_check'));
-			if (!empty($modSettings['disableHostnameLookup']))
+			$allOptions = array_flip(['main_ip_check', 'hostname_check', 'email_check', 'user_check']);
+
+			if (!empty($modSettings['disableHostnameLookup'])) {
 				unset($allOptions['hostname_check']);
+			}
 
 			$autoSelects = is_array($modSettings['aebg_auto_select']) ? $modSettings['aebg_auto_select'] : json_decode($modSettings['aebg_auto_select'], true);
-			foreach ($allOptions as $elID => $dummy)
+
+			foreach ($allOptions as $elID => $dummy) {
 				echo '
 			$("#', $elID, '").prop("checked", ', (in_array($elID, $autoSelects) ? 'true' : 'false'), ');';
+			}
 		}
-		
+
 		echo '
 		}
 		</script>';
@@ -104,4 +106,3 @@ function template_easyban_edits_below()
 		';
 
 }
-

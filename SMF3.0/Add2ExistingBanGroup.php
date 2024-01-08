@@ -29,15 +29,15 @@ class a2ebg
 		self::loadLanguage();
 
 		$config_vars[] = [
-				'select', 'aebg_auto_select',
-				[
-					'main_ip_check' => Lang::$txt['ban_on_ip'],
-					'hostname_check' => Lang::$txt['ban_on_hostname'],
-					'email_check' => Lang::$txt['ban_on_email'],
-					'user_check' => Lang::$txt['ban_on_username']
-				],
-				'multiple' => true,
-			];
+			'select', 'aebg_auto_select',
+			[
+				'main_ip_check' => Lang::$txt['ban_on_ip'],
+				'hostname_check' => Lang::$txt['ban_on_hostname'],
+				'email_check' => Lang::$txt['ban_on_email'],
+				'user_check' => Lang::$txt['ban_on_username'],
+			],
+			'multiple' => true,
+		];
 	}
 
 	// This is called when we edit a ban regardless of if its new or not.
@@ -47,41 +47,44 @@ class a2ebg
 		$ban_info['easy_ban_group'] = empty($_POST['easy_ban_group']) ? '0' : '1';
 
 		// We are adding or modifying a ban normally.
-		if (empty($_POST['ban_group']))
-		{
-			if (!empty($_POST['bg']))
-			{
-				$request = Db::$db->query('', '
+		if (empty($_POST['ban_group'])) {
+			if (!empty($_POST['bg'])) {
+				$request = Db::$db->query(
+					'',
+					'
 					SELECT
 						bg.id_ban_group, bg.easy_bg
 					FROM {db_prefix}ban_groups AS bg
 					WHERE bg.id_ban_group = {int:current_ban}',
 					[
 						'current_ban' => (int) $_REQUEST['bg'],
-					]
+					],
 				);
 				$row = Db::$db->fetch_assoc($request);
 				Db::$db->free_result($request);
 
 				Utils::$context['ban']['id'] = (int) $row['id_ban_group'];
 				Utils::$context['ban']['easy_bg'] = $row['easy_bg'];
-			}
-			else
+			} else {
 				Utils::$context['ban']['easy_bg'] = 0;
+			}
 
 			Utils::$context['easy_ban_group'] = $ban_info['easy_ban_group'];
+
 			return;
 		}
 
 		// This occurs when we are "adding" a ban.
-		$request = Db::$db->query('', '
+		$request = Db::$db->query(
+			'',
+			'
 			SELECT
 				bg.id_ban_group, bg.name, bg.ban_time, COALESCE(bg.expire_time, 0) AS expire_time, bg.reason, bg.notes, bg.cannot_access, bg.cannot_register, bg.cannot_login, bg.cannot_post, bg.easy_bg
 			FROM {db_prefix}ban_groups AS bg
 			WHERE bg.id_ban_group = {int:current_ban}',
 			[
 				'current_ban' => (int) $_REQUEST['ban_group'],
-			]
+			],
 		);
 		$row = Db::$db->fetch_assoc($request);
 		Db::$db->free_result($request);
@@ -92,7 +95,7 @@ class a2ebg
 			'name' => $row['name'],
 			'expiration' => [
 				'status' => empty($row['expire_time']) ? 'never' : ($row['expire_time'] < time() ? 'expired' : 'one_day'),
-				'days' => (int) ($row['expire_time'] > time() ? ($row['expire_time'] - time() < 86400 ? 1 : ceil(($row['expire_time'] - time()) / 86400)) : 0)
+				'days' => (int) ($row['expire_time'] > time() ? ($row['expire_time'] - time() < 86400 ? 1 : ceil(($row['expire_time'] - time()) / 86400)) : 0),
 			],
 			'reason' => $row['reason'],
 			'notes' => $row['notes'],
@@ -134,24 +137,28 @@ class a2ebg
 		Theme::loadTemplate('Add2ExistingBanGroup');
 
 		// Normal way of doing a new one? Skip.
-		if (empty(Utils::$context['ban']['from_user']))
-		{
+		if (empty(Utils::$context['ban']['from_user'])) {
 			Utils::$context['template_layers'][] = 'easyban_edits';
+
 			return;
 		}
 
 		// Find our ban groups we can append.
-		$request = Db::$db->query('', '
+		$request = Db::$db->query(
+			'',
+			'
 			SELECT id_ban_group, name
 			FROM {db_prefix}ban_groups
 			WHERE easy_bg = {int:one}
 			ORDER BY name',
 			[
 				'one' => '1',
-			]
+			],
 		);
-		while ($row = Db::$db->fetch_assoc($request))
+
+		while ($row = Db::$db->fetch_assoc($request)) {
 			Utils::$context['ban_group_suggestions'][(int) $row['id_ban_group']] = $row['name'];
+		}
 		Db::$db->free_result($request);
 
 		Utils::$context['ban_group_auto_selects'] = is_array(Config::$modSettings['aebg_auto_select']) ? Config::$modSettings['aebg_auto_select'] : Utils::jsonDecode(Config::$modSettings['aebg_auto_select']);
@@ -165,10 +172,13 @@ class a2ebg
 	// We are saving a ban.  Lets update that info if needed.
 	public static function addToEditBansPost(): void
 	{
-		if (!isset(Utils::$context['easy_ban_group']))
+		if (!isset(Utils::$context['easy_ban_group'])) {
 			return;
+		}
 
-		Db::$db->query('', '
+		Db::$db->query(
+			'',
+			'
 			UPDATE {db_prefix}ban_groups
 			SET
 				easy_bg = {int:easy_bg}
@@ -176,7 +186,7 @@ class a2ebg
 			[
 				'easy_bg' => Utils::$context['easy_ban_group'],
 				'id_ban_group' => (int) Utils::$context['ban']['id'],
-			]
+			],
 		);
 	}
 
@@ -184,20 +194,25 @@ class a2ebg
 	public static function addToBanList(): void
 	{
 		// Main page seems to call this as well.
-		if (empty(Utils::$context['ban']['id']))
+		if (empty(Utils::$context['ban']['id'])) {
 			return;
+		}
 
-		$request = Db::$db->query('', '
+		$request = Db::$db->query(
+			'',
+			'
 			SELECT
 				bg.easy_bg
 			FROM {db_prefix}ban_groups AS bg
 			WHERE bg.id_ban_group = {int:current_ban}',
 			[
 				'current_ban' => (int) Utils::$context['ban']['id'],
-			]
+			],
 		);
-		if (Db::$db->num_rows($request) == 0)
+
+		if (Db::$db->num_rows($request) == 0) {
 			ErrorHandler::fatalLang('ban_not_found', false);
+		}
 
 		$row = Db::$db->fetch_assoc($request);
 		Utils::$context['ban']['easy_bg'] = $row['easy_bg'];
